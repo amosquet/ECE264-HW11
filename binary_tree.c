@@ -14,6 +14,19 @@ TreeNode* createNode(int data) {
     // Initialize the node's data and set its left and right children to NULL
 
     // Return the pointer to the new node
+
+    TreeNode *newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    
+    return newNode;
 }
 
 // This is a warmup exercise.
@@ -41,6 +54,14 @@ void preorderTraversal(TreeNode* root) {
 // Step 2: recursively free the left and right subtrees.
 // Step 3: free the current node.
 void freeTree(TreeNode* root) {
+
+    if (root == NULL) {
+        return;
+    }
+
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
 }
 
 // The function `createTree` creates a binary tree from an array representation.
@@ -51,6 +72,36 @@ void freeTree(TreeNode* root) {
 // Step 4: return the created node.
 TreeNode* createTree(int* arr, int size) {
 
+    if (size <= 0) {
+        return NULL;
+    }
+
+    TreeNode* root = createNode(arr[0]);
+    TreeNode** nodes = (TreeNode**)malloc(size * sizeof(TreeNode*));
+    if (nodes == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    nodes[0] = root;
+
+    for (int i = 1; i < size; i++) {
+        if (arr[i] != -1) { // Assuming -1 indicates a null node
+            TreeNode* newNode = createNode(arr[i]);
+            nodes[i] = newNode;
+            if (i % 2 == 1) { //left child
+                nodes[(i - 1) / 2]->left = newNode;
+            } else { //right child
+                nodes[(i - 2) / 2]->right = newNode;
+            }
+        } else {
+            nodes[i] = NULL;
+        }
+    }
+
+    TreeNode* rootNode = nodes[0];
+    
+    free(nodes);
+    return rootNode;
 }
 
 // trimTree function:
@@ -65,6 +116,8 @@ TreeNode* trimTree(TreeNode* root, int low, int high) {
     // Hint 1: You need to keep track of the sum of the path from the root to the current node. You can do this by creating a helper function.
     // Hint 2: In your helper function, check if the current node is a leaf node. If it is, check if the sum of the path from the root to this leaf node is within the range [low, high].
     // Hint 3: When you remove a node, do not forget to free the memory allocated for that node.
+
+
 }
 
 // The function `toBST` converts a binary tree into a binary search tree (BST) by pruning subtrees that violate BST properties. 
