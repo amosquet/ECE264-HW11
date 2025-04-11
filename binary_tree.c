@@ -85,7 +85,7 @@ TreeNode* createTree(int* arr, int size) {
     nodes[0] = root;
 
     for (int i = 1; i < size; i++) {
-        if (arr[i] != -1) { // Assuming -1 indicates a null node
+        if (arr[i] != -1) { //-1 indicates a null node
             TreeNode* newNode = createNode(arr[i]);
             nodes[i] = newNode;
             if (i % 2 == 1) { //left child
@@ -112,12 +112,38 @@ TreeNode* createTree(int* arr, int size) {
 // This process should continue recursively until all remaining root-to-leaf paths satisfy the constraint.
 // The structure of the remaining nodes must be preserved, and the final tree must still be a valid binary tree. 
 // Your function should return the root of the trimmed tree.
+
+TreeNode* trimTreeHelper(TreeNode* root, int low, int high, int currentSum) {
+    
+    if (root == NULL) {
+        return NULL;
+    }
+
+    currentSum += root->data;
+
+    // Recursively trim the left and right subtrees
+    root->left = trimTreeHelper(root->left, low, high, currentSum);
+    root->right = trimTreeHelper(root->right, low, high, currentSum);
+
+    // If the current node is a leaf and its path sum is out of range, remove it
+    if (root->left == NULL && root->right == NULL) {
+        
+        if (currentSum < low || currentSum > high) {
+            
+            free(root);
+            return NULL;
+        }
+    }
+
+    return root;
+}
+
 TreeNode* trimTree(TreeNode* root, int low, int high) {
     // Hint 1: You need to keep track of the sum of the path from the root to the current node. You can do this by creating a helper function.
     // Hint 2: In your helper function, check if the current node is a leaf node. If it is, check if the sum of the path from the root to this leaf node is within the range [low, high].
     // Hint 3: When you remove a node, do not forget to free the memory allocated for that node.
 
-
+    return trimTreeHelper(root, low, high, 0);
 }
 
 // The function `toBST` converts a binary tree into a binary search tree (BST) by pruning subtrees that violate BST properties. 
@@ -125,8 +151,32 @@ TreeNode* trimTree(TreeNode* root, int low, int high) {
 // - All nodes in the left subtree have values less than the current node.
 // - All nodes in the right subtree have values greater than the current node.
 // **Restrictions**: The root node must remain unchanged. If a node's value violates BST properties relative to all its ancestors, its entire subtree is removed.
+
+TreeNode* toBSTHelper(TreeNode* root, int minValue, int maxValue) {
+    
+    if (root == NULL) {
+        return NULL;
+    }
+
+    //check if the current node's value is within the valid range
+    if (root->data < minValue || root->data > maxValue) {
+        
+        free(root);
+        return NULL;
+    }
+
+    //prune the left and right subtrees
+    root->left = toBSTHelper(root->left, minValue, root->data);
+    root->right = toBSTHelper(root->right, root->data, maxValue);
+
+    return root;
+}
+
 TreeNode* toBST(TreeNode* root) {
     // Hint1: You need to keep track of the minimum and maximum values allowed for each node in the tree. You can do this by creating a helper function.
     // Hint2: In your helper function, check if the current node's value is within the valid range. If it is not, remove the subtree rooted at this node.
     // Hint3: When you remove a node, do not forget to free the memory allocated for that subtree.
+
+    return toBSTHelper(root, INT_MIN, INT_MAX);
+
 }
