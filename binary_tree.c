@@ -33,19 +33,26 @@ TreeNode* createNode(int data) {
 // In-order traversal visits the left subtree, then the current node, and finally the right subtree.
 // The function `inorderTraversal` prints the data of each node in the tree in in-order.
 void inorderTraversal(TreeNode* root) {
-    // ...
-    printf("%d\n", root->data);
-    // ...
-        
+    
+    if (root == NULL) {
+        return;
+    }
+
+    inorderTraversal(root->left);  // Visit left subtree
+    printf("%d\n", root->data);   // Visit current node
+    inorderTraversal(root->right); // Visit right subtree
 }
 
 // This is a warmup exercise.
-// Pre-order traversal visits the current node, then the left subtree, and finally the right subtree.
-// The function `preorderTraversal` prints the data of each node in the tree in pre-order.
 void preorderTraversal(TreeNode* root) {
-    // ...
-    printf("%d\n", root->data);
-    // ...
+    
+    if (root == NULL) {
+        return;
+    }
+
+    printf("%d\n", root->data);   // Visit current node
+    preorderTraversal(root->left);  // Visit left subtree
+    preorderTraversal(root->right); // Visit right subtree
 }
 
 // The function `freeTree` frees the memory allocated for the binary tree.
@@ -71,7 +78,8 @@ void freeTree(TreeNode* root) {
 // Step 3: recursively create the left and right subtrees.
 // Step 4: return the created node.
 TreeNode* createTreeHelper(int* arr, int size, int index) {
-    // Base case: if index is out of bounds, return NULL
+
+    //base case: if index is out of bounds, return NULL
     if (index >= size || arr[index] == -1) {
         return NULL;
     }
