@@ -161,7 +161,7 @@ TreeNode* toBSTHelper(TreeNode* root, int minValue, int maxValue) {
     //check if the current node's value is within the valid range
     if (root->data < minValue || root->data > maxValue) {
         
-        free(root);
+        freeTree(root);
         return NULL;
     }
 
