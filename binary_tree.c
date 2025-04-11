@@ -1,3 +1,9 @@
+/*****+--*-**-**--*-*-**-*-*-**-----*--*---**-*--***************************
+* Created on Thu Apr 10 2025
+*
+* Copyright (c) 2025 Artus Mosquet
+******+--*-**-**--*-*-**-*-*-**-----*--*---**-*--**************************/
+
 #include "binary_tree.h"
 
 // ***
@@ -38,9 +44,9 @@ void inorderTraversal(TreeNode* root) {
         return;
     }
 
-    inorderTraversal(root->left);  // Visit left subtree
-    printf("%d\n", root->data);   // Visit current node
-    inorderTraversal(root->right); // Visit right subtree
+    inorderTraversal(root->left);  //visit left subtree
+    printf("%d\n", root->data);   //visit current node
+    inorderTraversal(root->right); //visit right subtree
 }
 
 // This is a warmup exercise.
@@ -50,9 +56,9 @@ void preorderTraversal(TreeNode* root) {
         return;
     }
 
-    printf("%d\n", root->data);   // Visit current node
-    preorderTraversal(root->left);  // Visit left subtree
-    preorderTraversal(root->right); // Visit right subtree
+    printf("%d\n", root->data);   //visit current node
+    preorderTraversal(root->left);  //visit left subtree
+    preorderTraversal(root->right); //visit right subtree
 }
 
 // The function `freeTree` frees the memory allocated for the binary tree.
@@ -66,9 +72,9 @@ void freeTree(TreeNode* root) {
         return;
     }
 
-    freeTree(root->left);
-    freeTree(root->right);
-    free(root);
+    freeTree(root->left); //free left subtree
+    freeTree(root->right); //free right subtree
+    free(root); //free current node
 }
 
 // The function `createTree` creates a binary tree from an array representation.
@@ -84,10 +90,10 @@ TreeNode* createTreeHelper(int* arr, int size, int index) {
         return NULL;
     }
 
-    // Create a new node with the current value
+    //create a new node with the current value
     TreeNode* node = createNode(arr[index]);
 
-    // Recursively create the left and right subtrees
+    //recursively create the left and right subtrees
     node->left = createTreeHelper(arr, size, 2 * index + 1);
     node->right = createTreeHelper(arr, size, 2 * index + 2);
 
@@ -115,11 +121,11 @@ TreeNode* trimTreeHelper(TreeNode* root, int low, int high, int currentSum) {
 
     currentSum += root->data;
 
-    // Recursively trim the left and right subtrees
+    //recursively trim the left and right subtrees
     root->left = trimTreeHelper(root->left, low, high, currentSum);
     root->right = trimTreeHelper(root->right, low, high, currentSum);
 
-    // If the current node is a leaf and its path sum is out of range, remove it
+    //if the current node is a leaf and its path sum is out of range, remove it
     if (root->left == NULL && root->right == NULL) {
         
         if (currentSum < low || currentSum > high) {
@@ -172,5 +178,4 @@ TreeNode* toBST(TreeNode* root) {
     // Hint3: When you remove a node, do not forget to free the memory allocated for that subtree.
 
     return toBSTHelper(root, INT_MIN, INT_MAX);
-
 }
