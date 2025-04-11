@@ -21,10 +21,10 @@ TreeNode* createNode(int data) {
         fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-    
-    newNode->data = data;
+
     newNode->left = NULL;
     newNode->right = NULL;
+    newNode->data = data;
     
     return newNode;
 }
@@ -70,38 +70,24 @@ void freeTree(TreeNode* root) {
 // Step 2: create a new node.
 // Step 3: recursively create the left and right subtrees.
 // Step 4: return the created node.
-TreeNode* createTree(int* arr, int size) {
-
-    if (size <= 0) {
+TreeNode* createTreeHelper(int* arr, int size, int index) {
+    // Base case: if index is out of bounds, return NULL
+    if (index >= size || arr[index] == -1) {
         return NULL;
     }
 
-    TreeNode* root = createNode(arr[0]);
-    TreeNode** nodes = (TreeNode**)malloc(size * sizeof(TreeNode*));
-    if (nodes == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
-    nodes[0] = root;
+    // Create a new node with the current value
+    TreeNode* node = createNode(arr[index]);
 
-    for (int i = 1; i < size; i++) {
-        if (arr[i] != -1) { //-1 indicates a null node
-            TreeNode* newNode = createNode(arr[i]);
-            nodes[i] = newNode;
-            if (i % 2 == 1) { //left child
-                nodes[(i - 1) / 2]->left = newNode;
-            } else { //right child
-                nodes[(i - 2) / 2]->right = newNode;
-            }
-        } else {
-            nodes[i] = NULL;
-        }
-    }
+    // Recursively create the left and right subtrees
+    node->left = createTreeHelper(arr, size, 2 * index + 1);
+    node->right = createTreeHelper(arr, size, 2 * index + 2);
 
-    TreeNode* rootNode = nodes[0];
-    
-    free(nodes);
-    return rootNode;
+    return node;
+}
+
+TreeNode* createTree(int* arr, int size) {
+    return createTreeHelper(arr, size, 0);
 }
 
 // trimTree function:
