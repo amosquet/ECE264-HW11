@@ -25,5 +25,7 @@ void preorderTraversal(TreeNode* root);
 void freeTree(TreeNode* root);
 TreeNode* trimTree(TreeNode* root, int low, int high);
 TreeNode* toBST(TreeNode* root);
+TreeNode* toBSTHelper(TreeNode* root, int minValue, int maxValue);
+TreeNode* trimTreeHelper(TreeNode* root, int low, int high, int currentSum);
 
 #endif // BINARY_TREE_H
